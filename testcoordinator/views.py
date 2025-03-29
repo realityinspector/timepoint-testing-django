@@ -290,7 +290,7 @@ def register(request):
             user = form.save()
             login(request, user)
             messages.success(request, 'Registration successful! Welcome to Test Coordinator.')
-            return redirect('dashboard')
+            return redirect('testcoordinator:dashboard')
     else:
         form = UserRegistrationForm()
     return render(request, 'testcoordinator/register.html', {'form': form}) 
