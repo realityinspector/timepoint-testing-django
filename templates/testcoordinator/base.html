@@ -90,7 +90,7 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
         <div class="container-fluid">
-            <a class="navbar-brand" href="{% url 'dashboard' %}">
+            <a class="navbar-brand" href="{% url 'testcoordinator:dashboard' %}">
                 <i class="fas fa-vial me-2"></i>Test Coordinator
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -106,11 +106,11 @@
                             <ul class="dropdown-menu dropdown-menu-end">
                                 {% if user.is_superuser %}
                                     <li><a class="dropdown-item" href="{% url 'admin:index' %}">Admin Panel</a></li>
-                                    <li><a class="dropdown-item" href="{% url 'onboarding_wizard' %}">Onboarding Wizard</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'testcoordinator:onboarding_wizard' %}">Onboarding Wizard</a></li>
                                     <li><hr class="dropdown-divider"></li>
                                 {% endif %}
-                                <li><a class="dropdown-item" href="{% url 'password_change' %}">Change Password</a></li>
-                                <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                                <li><a class="dropdown-item" href="{% url 'testcoordinator:password_change' %}">Change Password</a></li>
+                                <li><a class="dropdown-item" href="{% url 'testcoordinator:logout' %}">Logout</a></li>
                             </ul>
                         </li>
                     {% else %}
@@ -131,17 +131,17 @@
                     <div class="position-sticky pt-3">
                         <ul class="nav flex-column">
                             <li class="nav-item">
-                                <a class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}" href="{% url 'dashboard' %}">
+                                <a class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}" href="{% url 'testcoordinator:dashboard' %}">
                                     <i class="fas fa-tachometer-alt"></i> Dashboard
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link {% if 'test_case' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'test_case_list' %}">
+                                <a class="nav-link {% if 'test_case' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'testcoordinator:test_case_list' %}">
                                     <i class="fas fa-vial"></i> Test Cases
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link {% if 'test_queue' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'test_queue_list' %}">
+                                <a class="nav-link {% if 'test_queue' in request.resolver_match.url_name %}active{% endif %}" href="{% url 'testcoordinator:test_queue_list' %}">
                                     <i class="fas fa-list"></i> Test Queues
                                 </a>
                             </li>

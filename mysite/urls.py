@@ -28,7 +28,7 @@ urlpatterns = [
     path('accounts/password_change/done/', auth_views.PasswordChangeDoneView.as_view(template_name='testcoordinator/password_change_done.html'), name='password_change_done'),
     
     # Testcoordinator app URLs
-    path('', include('testcoordinator.urls')),
+    path('', include('testcoordinator.urls', namespace='testcoordinator')),
     
     # Redirect root to dashboard
     path('', RedirectView.as_view(pattern_name='dashboard', permanent=False)),

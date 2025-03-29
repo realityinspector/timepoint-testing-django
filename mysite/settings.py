@@ -138,9 +138,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Authentication settings
-LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = 'dashboard'
-LOGOUT_REDIRECT_URL = 'login'
+LOGIN_URL = 'testcoordinator:login'
+LOGIN_REDIRECT_URL = 'testcoordinator:dashboard'
+LOGOUT_REDIRECT_URL = 'testcoordinator:login'
 
 # FastAPI server settings (sister server)
 FASTAPI_BASE_URL = os.environ.get('FASTAPI_BASE_URL', 'http://fastapi:8000')
