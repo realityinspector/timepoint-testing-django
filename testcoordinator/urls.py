@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from django.contrib.auth.views import LoginView, LogoutView
 
 urlpatterns = [
     # Dashboard
@@ -23,4 +24,9 @@ urlpatterns = [
     path('testqueues/<int:pk>/edit/', views.TestQueueUpdateView.as_view(), name='test_queue_update'),
     path('testqueues/<int:pk>/delete/', views.TestQueueDeleteView.as_view(), name='test_queue_delete'),
     path('testqueues/<int:pk>/run/', views.run_test_queue, name='run_test_queue'),
+    
+    # Authentication
+    path('login/', LoginView.as_view(template_name='testcoordinator/login.html'), name='login'),
+    path('logout/', LogoutView.as_view(), name='logout'),
+    path('register/', views.register, name='register'),
 ] 

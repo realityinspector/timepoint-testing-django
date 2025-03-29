@@ -1,13 +1,13 @@
 {% extends "testcoordinator/base.html" %}
 
-{% block title %}Login - Test Coordinator{% endblock %}
+{% block title %}Register - Test Coordinator{% endblock %}
 
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-md-6 col-lg-4">
         <div class="card shadow">
             <div class="card-header">
-                <h4 class="mb-0">Login</h4>
+                <h4 class="mb-0">Register</h4>
             </div>
             <div class="card-body">
                 <form method="post">
@@ -37,15 +37,15 @@
                     {% endfor %}
                     
                     <div class="d-grid">
-                        <button type="submit" class="btn btn-primary">Login</button>
+                        <button type="submit" class="btn btn-primary">Register</button>
                     </div>
                 </form>
                 
                 <hr>
                 
                 <p class="text-center mb-0">
-                    Don't have an account? 
-                    <a href="{% url 'register' %}">Register here</a>
+                    Already have an account? 
+                    <a href="{% url 'login' %}">Login here</a>
                 </p>
             </div>
         </div>

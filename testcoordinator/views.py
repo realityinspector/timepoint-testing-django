@@ -12,6 +12,8 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserRegistrationForm
+from django.contrib.auth import login
 
 from .models import TestCase, TestQueue, TestResult
 
@@ -278,4 +280,17 @@ def run_test_queue(request, pk):
     test_queue.save()
     
     messages.success(request, f"Test queue '{test_queue.name}' run completed")
-    return redirect('test_queue_detail', pk=test_queue.pk) 
+    return redirect('test_queue_detail', pk=test_queue.pk)
+
+
+def register(request):
+    if request.method == 'POST':
+        form = UserRegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            messages.success(request, 'Registration successful! Welcome to Test Coordinator.')
+            return redirect('dashboard')
+    else:
+        form = UserRegistrationForm()
+    return render(request, 'testcoordinator/register.html', {'form': form}) 
