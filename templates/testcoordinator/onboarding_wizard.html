@@ -1,0 +1,225 @@
+{% extends "testcoordinator/base.html" %}
+
+{% block title %}Onboarding Wizard - Test Coordinator{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h2">Onboarding Wizard</h1>
+    </div>
+    
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold">Welcome to the Test Coordinator</h6>
+                </div>
+                <div class="card-body">
+                    <!-- Progress bar -->
+                    <div class="progress mb-4">
+                        <div class="progress-bar" role="progressbar" id="wizard-progress-bar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    
+                    <!-- Wizard steps -->
+                    <div id="wizard-steps">
+                        <!-- Step 1: Welcome -->
+                        <div class="wizard-step" id="step-1">
+                            <h4>Welcome to the Test Coordinator</h4>
+                            <p>This wizard will help you set up your test environment. As the first admin user, you'll configure how the system connects to your FastAPI testing service.</p>
+                            <p>The Test Coordinator helps you:</p>
+                            <ul>
+                                <li>Create and manage API test cases</li>
+                                <li>Organize tests into queues for batch execution</li>
+                                <li>Track test history and results</li>
+                                <li>Coordinate with your FastAPI testing services</li>
+                            </ul>
+                            <div class="mt-4 text-end">
+                                <button class="btn btn-primary next-step" data-step="1">Next <i class="fas fa-arrow-right"></i></button>
+                            </div>
+                        </div>
+                        
+                        <!-- Step 2: FastAPI Connection -->
+                        <div class="wizard-step d-none" id="step-2">
+                            <h4>Configure FastAPI Connection</h4>
+                            <p>Set up the connection to your FastAPI testing service. This is the service that will execute your tests.</p>
+                            <form id="fastapi-config-form">
+                                <div class="mb-3">
+                                    <label for="fastapi-url" class="form-label">FastAPI Base URL</label>
+                                    <input type="url" class="form-control" id="fastapi-url" 
+                                          placeholder="http://fastapi:8000" 
+                                          value="{{ FASTAPI_BASE_URL }}" required>
+                                    <div class="form-text">The base URL of your FastAPI testing service.</div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="fastapi-auth-token" class="form-label">Authentication Token (Optional)</label>
+                                    <input type="text" class="form-control" id="fastapi-auth-token" 
+                                          placeholder="Enter authentication token if required">
+                                    <div class="form-text">If your FastAPI service requires authentication, enter the token here.</div>
+                                </div>
+                                
+                                <div class="mt-4 d-flex justify-content-between">
+                                    <button class="btn btn-secondary prev-step" data-step="2"><i class="fas fa-arrow-left"></i> Previous</button>
+                                    <div>
+                                        <button type="button" class="btn btn-info me-2" id="test-connection">Test Connection</button>
+                                        <button class="btn btn-primary next-step" data-step="2">Next <i class="fas fa-arrow-right"></i></button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        
+                        <!-- Step 3: Create First Test Case -->
+                        <div class="wizard-step d-none" id="step-3">
+                            <h4>Create Your First Test Case</h4>
+                            <p>Let's create a simple test case to verify your setup.</p>
+                            <form id="test-case-form">
+                                <div class="mb-3">
+                                    <label for="test-name" class="form-label">Test Name</label>
+                                    <input type="text" class="form-control" id="test-name" 
+                                          placeholder="Healthcheck Test" value="API Healthcheck" required>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="test-description" class="form-label">Description</label>
+                                    <textarea class="form-control" id="test-description" rows="2" 
+                                            placeholder="Verifies that the API is responding correctly.">Simple test to verify the API is responding properly.</textarea>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="endpoint-url" class="form-label">Endpoint URL</label>
+                                    <input type="text" class="form-control" id="endpoint-url" 
+                                          placeholder="/health" value="/health" required>
+                                    <div class="form-text">The endpoint path to test (e.g., /api/users).</div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="payload" class="form-label">Request Payload (JSON)</label>
+                                    <textarea class="form-control" id="payload" rows="3" 
+                                            placeholder='{"key": "value"}'>{}</textarea>
+                                    <div class="form-text">The JSON payload to send in the request body.</div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="expected-response" class="form-label">Expected Response (JSON)</label>
+                                    <textarea class="form-control" id="expected-response" rows="3" 
+                                            placeholder='{"status": "ok"}'>{}</textarea>
+                                    <div class="form-text">The expected JSON response for a successful test.</div>
+                                </div>
+                                
+                                <div class="mt-4 d-flex justify-content-between">
+                                    <button class="btn btn-secondary prev-step" data-step="3"><i class="fas fa-arrow-left"></i> Previous</button>
+                                    <button class="btn btn-primary next-step" data-step="3">Next <i class="fas fa-arrow-right"></i></button>
+                                </div>
+                            </form>
+                        </div>
+                        
+                        <!-- Step 4: Completion -->
+                        <div class="wizard-step d-none" id="step-4">
+                            <div class="text-center mb-4">
+                                <i class="fas fa-check-circle text-success fa-5x"></i>
+                                <h4 class="mt-3">Setup Complete!</h4>
+                                <p>You've successfully set up the Test Coordinator.</p>
+                            </div>
+                            
+                            <div class="alert alert-info">
+                                <h5>Next Steps:</h5>
+                                <ul class="mb-0">
+                                    <li>Create additional test cases for your API endpoints</li>
+                                    <li>Organize tests into test queues for batch execution</li>
+                                    <li>Run tests and monitor results</li>
+                                    <li>Invite team members to collaborate (they'll have regular user permissions)</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="mt-4 text-center">
+                                <a href="{% url 'dashboard' %}" class="btn btn-primary">Go to Dashboard <i class="fas fa-home"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Progress tracking
+        const totalSteps = 4;
+        let currentStep = 1;
+        
+        function updateProgress() {
+            const progressPercentage = ((currentStep - 1) / (totalSteps - 1)) * 100;
+            document.getElementById('wizard-progress-bar').style.width = progressPercentage + '%';
+            document.getElementById('wizard-progress-bar').setAttribute('aria-valuenow', progressPercentage);
+        }
+        
+        function showStep(stepNumber) {
+            // Hide all steps
+            document.querySelectorAll('.wizard-step').forEach(step => {
+                step.classList.add('d-none');
+            });
+            
+            // Show the current step
+            document.getElementById('step-' + stepNumber).classList.remove('d-none');
+            
+            // Update progress
+            currentStep = stepNumber;
+            updateProgress();
+        }
+        
+        // Next step buttons
+        document.querySelectorAll('.next-step').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                const step = parseInt(this.getAttribute('data-step'));
+                
+                // Form validation could be added here
+                
+                showStep(step + 1);
+            });
+        });
+        
+        // Previous step buttons
+        document.querySelectorAll('.prev-step').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                const step = parseInt(this.getAttribute('data-step'));
+                showStep(step - 1);
+            });
+        });
+        
+        // Test connection button
+        document.getElementById('test-connection').addEventListener('click', function() {
+            const url = document.getElementById('fastapi-url').value;
+            const token = document.getElementById('fastapi-auth-token').value;
+            
+            // Show loading indicator
+            this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Testing...';
+            this.disabled = true;
+            
+            // In a real implementation, you would make an AJAX call to test the connection
+            // For this demo, we'll simulate a successful connection after a delay
+            setTimeout(() => {
+                this.innerHTML = '<i class="fas fa-check"></i> Connection Successful';
+                this.classList.remove('btn-info');
+                this.classList.add('btn-success');
+                
+                // Re-enable after 2 seconds and reset
+                setTimeout(() => {
+                    this.innerHTML = 'Test Connection';
+                    this.disabled = false;
+                    this.classList.remove('btn-success');
+                    this.classList.add('btn-info');
+                }, 2000);
+            }, 1500);
+        });
+        
+        // Initialize
+        showStep(1);
+    });
+</script>
+{% endblock %}
+
+{% endblock %} 

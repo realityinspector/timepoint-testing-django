@@ -1,0 +1,245 @@
+{% extends "testcoordinator/base.html" %}
+
+{% block title %}Dashboard - Test Coordinator{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h2">Dashboard</h1>
+        <div>
+            <a href="{% url 'test_case_create' %}" class="btn btn-primary me-2">
+                <i class="fas fa-plus"></i> New Test Case
+            </a>
+            <a href="{% url 'test_queue_create' %}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> New Test Queue
+            </a>
+        </div>
+    </div>
+    
+    <!-- Stats Overview -->
+    <div class="row mb-4">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Total Test Cases</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ stats.total_tests }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-vial fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                Passed Tests</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ stats.passed_tests }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-check-circle fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                Pending Tests</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ stats.pending_tests }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-clock fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-danger shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                                Failed Tests</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ stats.failed_tests }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-times-circle fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <!-- Recent Test Cases -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold">Recent Test Cases</h6>
+                    <a href="{% url 'test_case_list' %}" class="btn btn-sm btn-primary">View All</a>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Status</th>
+                                    <th>Created</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for test_case in test_cases %}
+                                <tr>
+                                    <td>
+                                        <a href="{% url 'test_case_detail' test_case.id %}">{{ test_case.name }}</a>
+                                    </td>
+                                    <td>
+                                        <span class="badge status-{{ test_case.status }}">{{ test_case.status }}</span>
+                                    </td>
+                                    <td>{{ test_case.created_at|date:"M d, Y" }}</td>
+                                    <td>
+                                        <a href="{% url 'run_test_case' test_case.id %}" class="btn btn-sm btn-primary">
+                                            <i class="fas fa-play"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="4" class="text-center">No test cases created yet</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Recent Test Queues -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold">Recent Test Queues</h6>
+                    <a href="{% url 'test_queue_list' %}" class="btn btn-sm btn-primary">View All</a>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Status</th>
+                                    <th>Created</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for queue in test_queues %}
+                                <tr>
+                                    <td>
+                                        <a href="{% url 'test_queue_detail' queue.id %}">{{ queue.name }}</a>
+                                    </td>
+                                    <td>
+                                        <span class="badge status-{{ queue.status }}">{{ queue.status }}</span>
+                                    </td>
+                                    <td>{{ queue.created_at|date:"M d, Y" }}</td>
+                                    <td>
+                                        <a href="{% url 'run_test_queue' queue.id %}" class="btn btn-sm btn-primary">
+                                            <i class="fas fa-play"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="4" class="text-center">No test queues created yet</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Recent Results -->
+    <div class="row">
+        <div class="col-12 mb-4">
+            <div class="card shadow">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold">Recent Test Results</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Test Case</th>
+                                    <th>Queue</th>
+                                    <th>Status</th>
+                                    <th>Response Time</th>
+                                    <th>Run At</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for result in recent_results %}
+                                <tr>
+                                    <td>
+                                        <a href="{% url 'test_case_detail' result.test_case.id %}">
+                                            {{ result.test_case.name }}
+                                        </a>
+                                    </td>
+                                    <td>
+                                        {% if result.queue %}
+                                            <a href="{% url 'test_queue_detail' result.queue.id %}">
+                                                {{ result.queue.name }}
+                                            </a>
+                                        {% else %}
+                                            -
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <span class="badge status-{{ result.status }}">{{ result.status }}</span>
+                                    </td>
+                                    <td>
+                                        {% if result.response_time_ms %}
+                                            {{ result.response_time_ms }} ms
+                                        {% else %}
+                                            -
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ result.run_at|date:"M d, Y H:i:s" }}</td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="5" class="text-center">No test results yet</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
