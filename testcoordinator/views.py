@@ -12,10 +12,10 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserRegistrationForm
 from django.contrib.auth import login
 
 from .models import TestCase, TestQueue, TestResult
+from .forms import UserRegistrationForm
 
 
 class DashboardView(LoginRequiredMixin, TemplateView):
